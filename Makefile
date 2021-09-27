@@ -6,7 +6,7 @@ DIRECTORIES := $(sort $(dir $(OBJECTS)))
 INC_PATHS = -Isrc -Istdcore -Imathcore
 LIB_PATHS = -Lstdcore -Lmathcore
 LDFLAGS	= -lglfw -lGL -lGLU -lGLEW -lpthread -lstdcore -lmathcore
-TARGET	= Blaze
+TARGET	= wv
 
 all: build $(TARGET)
 
