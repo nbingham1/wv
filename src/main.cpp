@@ -25,6 +25,7 @@
 #include <math/geometry.h>
 #include <time.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 #include "graphics/opengl.h"
 #include "engine/canvas.h"
@@ -38,53 +39,11 @@ bool windowed = true;
 
 GLFWwindow *window = NULL;
 canvashdl canvas;
+int player = 0;
 
 void release(preference *pref, vec3f value)
 {
 	glfwSetWindowShouldClose(window, true);
-}
-
-void split(preference *pref, vec3f value)
-{
-	if (value[1] > 0.0)
-	{
-		for (list<objecthdl*>::iterator i = canvas.objects.begin(); i != canvas.objects.end(); i++)
-			if ((*i)->type == "planet")
-				((planethdl*)(*i))->geometry.split(*i);
-	}
-}
-
-void merge(preference *pref, vec3f value)
-{
-	if (value[1] > 0.0)
-	{
-		for (list<objecthdl*>::iterator i = canvas.objects.begin(); i != canvas.objects.end(); i++)
-			if ((*i)->type == "planet")
-				((planethdl*)(*i))->geometry.merge();
-	}
-}
-
-int player = 0;
-void next_player(preference *pref, vec3f value)
-{
-	if (value[1] > 0.0)
-	{
-		player = (player+1)%canvas.players.size();
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_W, preference(&canvas.players[player], playerhdl::forward));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_A, preference(&canvas.players[player], playerhdl::left));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_S, preference(&canvas.players[player], playerhdl::backward));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_D, preference(&canvas.players[player], playerhdl::right));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_E, preference(&canvas.players[player], playerhdl::up));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_Q, preference(&canvas.players[player], playerhdl::down));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_PERIOD, preference(&canvas.players[player], playerhdl::accelerate));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_COMMA, preference(&canvas.players[player], playerhdl::deccelerate));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_Z, preference(&canvas.players[player], playerhdl::stop));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_G, preference(&canvas.players[player], split));
-		canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_H, preference(&canvas.players[player], merge));
-
-		canvas.devices["mouse"].axes[0].control = preference(&canvas.players[player], playerhdl::horizontal);
-		canvas.devices["mouse"].axes[1].control = preference(&canvas.players[player], playerhdl::vertical);
-	}
 }
 
 void init(int w, int h)
@@ -102,7 +61,6 @@ void init(int w, int h)
 	}
 
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_ESCAPE, preference(NULL, release));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_N, preference(NULL, next_player));
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_W, preference(&canvas.players[player], playerhdl::forward));
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_A, preference(&canvas.players[player], playerhdl::left));
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_S, preference(&canvas.players[player], playerhdl::backward));
@@ -112,8 +70,6 @@ void init(int w, int h)
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_PERIOD, preference(&canvas.players[player], playerhdl::accelerate));
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_COMMA, preference(&canvas.players[player], playerhdl::deccelerate));
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_Z, preference(&canvas.players[player], playerhdl::stop));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_G, preference(&canvas.players[player], split));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_H, preference(&canvas.players[player], merge));
 
 	canvas.devices["mouse"].axes[0].control = preference(&canvas.players[player], playerhdl::horizontal);
 	canvas.devices["mouse"].axes[1].control = preference(&canvas.players[player], playerhdl::vertical);
@@ -187,8 +143,6 @@ void error_callback(int error, const char* description)
     fputs(description, stderr);
 }
 
-#include <sys/time.h>
-
 int main(int argc, char **argv)
 {
 	if (!glfwInit())
@@ -224,7 +178,6 @@ int main(int argc, char **argv)
 	fprintf(stdout, "Status: Using OpenGL %s\n", glGetString(GL_VERSION));
 	fprintf(stdout, "Status: Using GLSL %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, cursorfunc);
 	glfwSetMouseButtonCallback(window, mousefunc);
 	glfwSetKeyCallback(window, keyfunc);
@@ -233,13 +186,11 @@ int main(int argc, char **argv)
 
 	// Initialize Threading
 	pthread_create(&prepare_thread, NULL, preparefunc, NULL);
-	//pthread_create(&display_thread, NULL, displayfunc, NULL);
 	
 	displayfunc(NULL);
 
 	void *end;
 	pthread_join(prepare_thread, &end);
-	//pthread_join(display_thread, &end);
 	
 	glfwDestroyWindow(window);
 	glfwTerminate();

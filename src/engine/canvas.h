@@ -14,7 +14,6 @@
 
 #include "player.h"
 #include "object.h"
-#include "planet.h"
 
 using namespace core;
 

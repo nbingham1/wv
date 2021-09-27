@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/time.h>
-#include "block.h"
 #include <math/noise.h>
 
 canvashdl::canvashdl()
@@ -49,8 +48,6 @@ void canvashdl::initialize(int w, int h)
 		glDepthFunc(GL_LEQUAL);
 		glClearDepth(1.0);
 	glDisable(GL_CULL_FACE);
-
-	objects.push_back(new planethdl(palette, 0));
 }
 
 void canvashdl::reshape(int w, int h)
