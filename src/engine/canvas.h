@@ -33,12 +33,6 @@ struct canvashdl
 	list<objecthdl*> objects;
 	array<playerhdl> players;
 
-	double frame_number;
-	double frame_start_time;
-	double real_current_time;
-	double game_current_time;
-	double game_time_multiplier;
-
 	framehdl frame;
 
 	void initialize(int w, int h);
@@ -48,7 +42,6 @@ struct canvashdl
 	void prepare();
 	void render();
 
-	void clock();
 	void input();
 
 	playerhdl *add_player();

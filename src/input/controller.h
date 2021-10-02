@@ -48,7 +48,7 @@ struct controllerhdl
 	buttonshdl buttons;
 	array<axishdl> axes;
 
-	void update(double real_current_time, double game_current_time);
+	void update();
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "graph.h"
+#include "../graphics/opengl.h"
 
 plothdl::plothdl(palettehdl &palette)
 {

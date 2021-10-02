@@ -79,7 +79,6 @@ void *displayfunc(void *data)
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		canvas.clock();
 		canvas.input();
 		canvas.render();
 		glfwSwapBuffers(window);
@@ -105,8 +104,8 @@ void cursorfunc(GLFWwindow* window, double x, double y)
 			mouse->value.axes[1].warp((float)y/(float)canvas.screen[1]);
 			init = true;
 		}
-		mouse->value.axes[0].set((float)x/(float)canvas.screen[0], canvas.real_current_time, canvas.game_current_time);
-		mouse->value.axes[1].set((float)y/(float)canvas.screen[1], canvas.real_current_time, canvas.game_current_time);
+		mouse->value.axes[0].set((float)x/(float)canvas.screen[0], 0.0, 0.0);
+		mouse->value.axes[1].set((float)y/(float)canvas.screen[1], 0.0, 0.0);
 	}
 }
 
@@ -114,14 +113,14 @@ void mousefunc(GLFWwindow* window, int button, int action, int mods)
 {
 	map<string, controllerhdl>::iterator mouse = canvas.devices.find("mouse");
 	if (mouse != canvas.devices.end())
-		mouse->value.buttons.set(button, action, canvas.real_current_time, canvas.game_current_time);
+		mouse->value.buttons.set(button, action, 0.0, 0.0);
 }
 
 void keyfunc(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 	map<string, controllerhdl>::iterator keyboard = canvas.devices.find("keyboard");
 	if (keyboard != canvas.devices.end())
-		keyboard->value.buttons.set(key, action != 0, canvas.real_current_time, canvas.game_current_time);
+		keyboard->value.buttons.set(key, action != 0, 0.0, 0.0);
 }
 
 void error_callback(int error, const char* description)

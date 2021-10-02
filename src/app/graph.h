@@ -3,7 +3,6 @@
 #include <std/list.h>
 #include <math/geometry.h>
 #include "../engine/object.h"
-#include "../engine/rigid.h"
 #include "../graphics/palette.h"
 
 using namespace core;

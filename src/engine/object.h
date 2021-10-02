@@ -25,27 +25,14 @@ struct objecthdl
 	// dynamic type checking
 	string type;
 
-	// physics
-	double last_update_time;
-	vec3F position;
-	vec3f velocity;
-	vec3f acceleration;
-	double mass;
-
-	vec3f orientation;
-	vec3f angular_velocity;
-	vec3f angular_acceleration;
-	double inertia;
+	vec3f position;
 
 	// user interface
 	bool selected;
 
-	void impulse(vec3d force, vec3d location);
-
 	virtual void init(canvashdl &canvas);
 	virtual void prepare(canvashdl &canvas);
 	virtual void render(framehdl &frame);
-	virtual void clock(double game_current_time);
 };
 
 

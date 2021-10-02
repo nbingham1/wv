@@ -39,15 +39,15 @@ controllerhdl::~controllerhdl()
 {
 }
 
-void controllerhdl::update(double real_current_time, double game_current_time)
+void controllerhdl::update()
 {
 	for (int i = 0; i < buttons.pressed.size(); i++)
 	{
 		map<int, preference>::iterator j = buttons.control.find(buttons.pressed[i]);
 		if (j != buttons.control.end())
-			j->value(vec3f(1.0f, 0.0f, 0.0f), real_current_time, game_current_time);
+			j->value(vec3f(1.0f, 0.0f, 0.0f), 0.0, 0.0);
 	}
 
 	for (int i = 0; i < axes.size(); i++)
-		axes[i].move(0, real_current_time, game_current_time);
+		axes[i].move(0, 0.0, 0.0);
 }

@@ -15,11 +15,6 @@
 
 canvashdl::canvashdl()
 {
-	frame_start_time = 0.0;
-	frame_number = 0.0;
-	game_time_multiplier = 1.0;
-	game_current_time = 0.0;
-	real_current_time = 0.0;
 }
 
 canvashdl::~canvashdl()
@@ -29,15 +24,6 @@ canvashdl::~canvashdl()
 
 void canvashdl::initialize(int w, int h)
 {
-	// Initialize Time
-	timeval gtime;
-	gettimeofday(&gtime, NULL);
-	real_current_time		= gtime.tv_sec + gtime.tv_usec*1.0E-6;
-	frame_number			= 0.0;
-	frame_start_time		= real_current_time;
-	game_current_time		= 0.0;
-	game_time_multiplier	= 1.0;
-
 	// Initialize Display
 	screen[0] = w;
 	screen[1] = h;
@@ -45,9 +31,7 @@ void canvashdl::initialize(int w, int h)
 	// Initialize some OpenGL Settings
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
-	glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL);
-		glClearDepth(1.0);
+	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
 	objects.push_back(new plothdl(palette));
@@ -92,25 +76,10 @@ void canvashdl::render()
 	}
 }
 
-void canvashdl::clock()
-{
-	timeval gtime;
-	gettimeofday(&gtime, NULL);
-	real_current_time = gtime.tv_sec + gtime.tv_usec*1.0E-6;
-
-	frame_number++;
-	game_current_time += game_time_multiplier*(real_current_time - frame_start_time);
-	frame_start_time = real_current_time;
-
-	for (list<objecthdl*>::iterator obj = objects.begin(); obj != objects.end(); obj++)
-		if (*obj != NULL)
-			(*obj)->clock(game_current_time);
-}
-
 void canvashdl::input()
 {
 	for (map<string, controllerhdl>::iterator i = devices.begin(); i != devices.end(); i++)
-		i->value.update(real_current_time, game_current_time);
+		i->value.update();
 }
 
 playerhdl *canvashdl::add_player()
