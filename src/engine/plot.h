@@ -7,10 +7,34 @@
 
 using namespace core;
 
-struct signalhdl
+struct datahdl
 {
 	string name;
-	array<vec2f> data;
+	array<vec2f> values;
+};
+
+struct geometryhdl {
+	array<vec2f> points;
+	array<int> indices;
+	vec4f color;
+	
+	void render(int program);
+};
+
+struct signalhdl {
+	datahdl *data;
+	geometryhdl curve;
+
+	void prepare(vec2f offset, vec2f size);
+	void render(int program);
+};
+
+struct gridhdl {
+	geometryhdl axes;
+	geometryhdl grid;
+
+	void prepare(vec2i screen, vec2f offset, vec2f size);
+	void render(int program);
 };
 
 struct plothdl : elemhdl
@@ -18,13 +42,15 @@ struct plothdl : elemhdl
 	plothdl(palettehdl &palette);
 	~plothdl();
 
-	array<list<signalhdl>::iterator> signals;
-
 	int program;
 
-	array<vec2f> points;
-	array<int> indices;
+	gridhdl grid;
+	list<signalhdl> signals;
+
+	vec2f offset;
+	vec2f scale;
 
 	void render(vec2i size);
 };
+
 
