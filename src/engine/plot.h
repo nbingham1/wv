@@ -22,7 +22,7 @@ struct plothdl : elemhdl
 
 	int program;
 
-	array<vec3f> points;
+	array<vec2f> points;
 	array<int> indices;
 
 	void render(vec2i size);

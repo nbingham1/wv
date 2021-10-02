@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "plot.h"
 #include "../graphics/opengl.h"
 
 plothdl::plothdl(palettehdl &palette)
@@ -11,19 +11,16 @@ plothdl::plothdl(palettehdl &palette)
 	float height = 1.0;
 	float depth = 1.0;
 
-	points.reserve(4);
-	indices.reserve(6);
+	points.reserve(3);
+	indices.reserve(4);
 
-	points.push_back(vec3f(-width/2, -height/2, -depth/2));
-	points.push_back(vec3f( width/2, -height/2, -depth/2));
-	points.push_back(vec3f( width/2,  height/2, -depth/2));
-	points.push_back(vec3f(-width/2,  height/2, -depth/2));
+	points.push_back(vec2f(-1.0, -1.0));
+	points.push_back(vec2f(1.0, -1.0));
+	points.push_back(vec2f(-1.0, 1.0));
 	indices.push_back(0);
 	indices.push_back(1);
-	indices.push_back(2);
 	indices.push_back(0);
 	indices.push_back(2);
-	indices.push_back(3);
 }
 
 plothdl::~plothdl()
@@ -47,14 +44,14 @@ void plothdl::render(vec2i size)
 		GLuint vbo;
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vec3f)*points.size(), (GLfloat*)points.data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vec2f)*points.size(), (GLfloat*)points.data, GL_STATIC_DRAW);
 		GLuint ibo;
 		glGenBuffers(1, &ibo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*indices.size(), (GLuint*)indices.data, GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(vertex_location);
-		glVertexAttribPointer(vertex_location, 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(vertex_location, 2, GL_FLOAT, false, 0, 0);
 		glDrawElements(GL_LINES, indices.size(), GL_UNSIGNED_INT, 0);
 		glDisableVertexAttribArray(vertex_location);
 
