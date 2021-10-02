@@ -56,23 +56,9 @@ void init(int w, int h)
 	canvas.devices.insert("keyboard", controllerhdl());
 	for (int i = 0; i < 1; i++) {
 		playerhdl *player = canvas.add_player();
-		player->camera->position = vec3f(20.0, 0.0, 0.0);
-		player->camera->orientation = vec3f(m_pi*0.2, -m_pi*0.8, 0.0);
 	}
 
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_ESCAPE, preference(NULL, release));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_W, preference(&canvas.players[player], playerhdl::forward));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_A, preference(&canvas.players[player], playerhdl::left));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_S, preference(&canvas.players[player], playerhdl::backward));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_D, preference(&canvas.players[player], playerhdl::right));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_E, preference(&canvas.players[player], playerhdl::up));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_Q, preference(&canvas.players[player], playerhdl::down));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_PERIOD, preference(&canvas.players[player], playerhdl::accelerate));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_COMMA, preference(&canvas.players[player], playerhdl::deccelerate));
-	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_Z, preference(&canvas.players[player], playerhdl::stop));
-
-	canvas.devices["mouse"].axes[0].control = preference(&canvas.players[player], playerhdl::horizontal);
-	canvas.devices["mouse"].axes[1].control = preference(&canvas.players[player], playerhdl::vertical);
 	canvas.devices["mouse"].axes[0].low = 0.25;
 	canvas.devices["mouse"].axes[0].high = 0.75;
 	canvas.devices["mouse"].axes[1].low = 0.25;
@@ -178,6 +164,7 @@ int main(int argc, char **argv)
 	fprintf(stdout, "Status: Using OpenGL %s\n", glGetString(GL_VERSION));
 	fprintf(stdout, "Status: Using GLSL %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, cursorfunc);
 	glfwSetMouseButtonCallback(window, mousefunc);
 	glfwSetKeyCallback(window, keyfunc);

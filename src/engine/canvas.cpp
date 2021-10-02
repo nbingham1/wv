@@ -11,6 +11,7 @@
 #include <pthread.h>
 #include <sys/time.h>
 #include <math/noise.h>
+#include "../app/graph.h"
 
 canvashdl::canvashdl()
 {
@@ -48,6 +49,8 @@ void canvashdl::initialize(int w, int h)
 		glDepthFunc(GL_LEQUAL);
 		glClearDepth(1.0);
 	glDisable(GL_CULL_FACE);
+
+	objects.push_back(new plothdl(palette));
 }
 
 void canvashdl::reshape(int w, int h)
@@ -84,7 +87,7 @@ void canvashdl::render()
 		players[i].view(frame, screen);
 
 		for (list<objecthdl*>::iterator i = objects.begin(); i != objects.end(); i++)
-			if ((*i) != NULL && (*i)->type != "camera")
+			if ((*i) != NULL)
 				(*i)->render(frame);
 	}
 }
@@ -145,9 +148,6 @@ playerhdl *canvashdl::add_player()
 		}
 	}
 
-	camerahdl *camera = new camerahdl();
-	objects.push_back(camera);
-	player.camera = camera;
 	players.push_back(player);
 
 	return &players.back();
