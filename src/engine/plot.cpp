@@ -40,14 +40,19 @@ void signalhdl::render(int program) {
 	curve.render(program);
 }
 
-void gridhdl::prepare(vec2i screen, vec2f offset, vec2f size) {
+void gridhdl::prepare(vec2f inches, vec2f offset, vec2f size) {
+	axes.points.clear();
+	axes.indices.clear();
+
 	axes.points.reserve(3);
 	axes.indices.reserve(4);
 	axes.color = vec4f(1.0, 1.0, 1.0, 1.0);
 
-	axes.points.push_back(vec2f(0.001, 0.001));
-	axes.points.push_back(vec2f(0.999, 0.001));
-	axes.points.push_back(vec2f(0.001, 0.999));
+	offset = 0.5f/inches;
+
+	axes.points.push_back(offset);
+	axes.points.push_back(vec2f(1.0, offset[1]));
+	axes.points.push_back(vec2f(offset[0], 1.0));
 	axes.indices.push_back(0);
 	axes.indices.push_back(1);
 	axes.indices.push_back(0);
@@ -64,15 +69,21 @@ plothdl::plothdl(palettehdl &palette)
 	type = "plot";
 
 	program = palette.program("res/plot.vx", "res/plot.ft");
-
-	grid.prepare(vec2i(), vec2f(0.0, 0.0), vec2f(1.0, 1.0));
 }
 
 plothdl::~plothdl()
 {
 }
 
-void plothdl::render(vec2i size)
+void plothdl::prepare(vec2f inches)
+{
+	grid.prepare(inches, offset, size);
+	for (auto i = signals.begin(); i != signals.end(); i++) {
+		i->prepare(offset, size);
+	}
+}
+
+void plothdl::render()
 {
 	glUseProgram(program);
 	grid.render(program);

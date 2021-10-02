@@ -34,9 +34,10 @@ struct elemhdl
 	bool selected;
 
 	virtual void init(canvashdl &canvas);
-	virtual void prepare(canvashdl &canvas);
-	virtual void render(vec2i size);
+	virtual void prepare(vec2f inches);
+	virtual void render();
 
+	void generate(vec2i dpi, vec2i parent_offset, vec2i parent_size);
 	void view(vec2i parent_offset, vec2i parent_size);
 };
 

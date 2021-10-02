@@ -48,9 +48,15 @@ void release(preference *pref, vec3f value)
 void init(int w, int h)
 {
 	srand(time(0));
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	canvas.initialize(w, h);
+	char *dpi = getenv("DPI");
+	int x, y;
+	if (dpi == nullptr || sscanf(dpi, "%dx%d", &x, &y) != 2) {
+		x = 96;
+		y = 96;
+	}
+
+	canvas.initialize(w, h, x, y);
 	canvas.devices.insert("mouse", controllerhdl(2));
 	canvas.devices.insert("keyboard", controllerhdl());
 	
@@ -166,14 +172,8 @@ int main(int argc, char **argv)
 
 	init(mode->width, mode->height);
 
-	// Initialize Threading
-	pthread_create(&prepare_thread, NULL, preparefunc, NULL);
-	
 	displayfunc(NULL);
 
-	void *end;
-	pthread_join(prepare_thread, &end);
-	
 	glfwDestroyWindow(window);
 	glfwTerminate();
 }

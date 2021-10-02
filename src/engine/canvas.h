@@ -27,11 +27,12 @@ struct canvashdl
 	palettehdl palette;
 
 	vec2i screen;
+	vec2i dpi;
 
 	map<string, controllerhdl> devices;
 	elemhdl ui;
 
-	void initialize(int w, int h);
+	void initialize(int w, int h, int dx, int dy);
 	void reshape(int w, int h);
 	void release();
 
