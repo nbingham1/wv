@@ -23,34 +23,34 @@ void axishdl::warp(float v)
 	value[0] = v;
 }
 
-void axishdl::set(float v, double real_current_time, double game_current_time)
+void axishdl::set(float v)
 {
 	value[2] = (v - value[0]) - value[1];
 	value[1] = v - value[0];
 	value[0] = v;
 
 	if (control.is_valid())
-		control(value, real_current_time, game_current_time);
+		control(value);
 }
 
-void axishdl::move(float v, double real_current_time, double game_current_time)
+void axishdl::move(float v)
 {
 	value[2] = v - value[1];
 	value[1] = v;
 	value[0] += v;
 
 	if (control.is_valid())
-		control(value, real_current_time, game_current_time);
+		control(value);
 }
 
-void axishdl::push(float v, double real_current_time, double game_current_time)
+void axishdl::push(float v)
 {
 	value[2] = v;
 	value[1] += v;
 	value[0] += value[1];
 
 	if (control.is_valid())
-		control(value, real_current_time, game_current_time);
+		control(value);
 }
 
 void axishdl::reset()

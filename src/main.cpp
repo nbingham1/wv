@@ -104,8 +104,8 @@ void cursorfunc(GLFWwindow* window, double x, double y)
 			mouse->value.axes[1].warp((float)y/(float)canvas.screen[1]);
 			init = true;
 		}
-		mouse->value.axes[0].set((float)x/(float)canvas.screen[0], 0.0, 0.0);
-		mouse->value.axes[1].set((float)y/(float)canvas.screen[1], 0.0, 0.0);
+		mouse->value.axes[0].set((float)x/(float)canvas.screen[0]);
+		mouse->value.axes[1].set((float)y/(float)canvas.screen[1]);
 	}
 }
 
@@ -113,14 +113,14 @@ void mousefunc(GLFWwindow* window, int button, int action, int mods)
 {
 	map<string, controllerhdl>::iterator mouse = canvas.devices.find("mouse");
 	if (mouse != canvas.devices.end())
-		mouse->value.buttons.set(button, action, 0.0, 0.0);
+		mouse->value.buttons.set(button, action);
 }
 
 void keyfunc(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 	map<string, controllerhdl>::iterator keyboard = canvas.devices.find("keyboard");
 	if (keyboard != canvas.devices.end())
-		keyboard->value.buttons.set(key, action != 0, 0.0, 0.0);
+		keyboard->value.buttons.set(key, action != 0);
 }
 
 void error_callback(int error, const char* description)

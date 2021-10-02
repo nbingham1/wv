@@ -18,14 +18,10 @@ struct preference
 	preference(void *data, void (*function)(preference *, vec3f));
 	~preference();
 
-	double real_current_time;
-	double game_current_time;
-	double real_last_time;
-	double game_last_time;
 	void *data;
 	void (*function)(preference*, vec3f);
 
-	void operator()(vec3f value, double real_current_time, double game_current_time);
+	void operator()(vec3f value);
 	bool is_valid();
 };
 

@@ -22,10 +22,10 @@ struct buttonshdl
 	array<int> pressed;
 	map<int, preference> control;
 
-	void press(int button, double real_current_time, double game_current_time);		// handle button press event
-	void release(int button, double real_current_time, double game_current_time);	// handle button release event
+	void press(int button);		// handle button press event
+	void release(int button);	// handle button release event
 	bool get(int button);		// get current state of button
-	void set(int button, bool value, double real_current_time, double game_current_time);
+	void set(int button, bool value);
 
 	void reset();				// reset all button states to released
 };

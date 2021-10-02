@@ -24,9 +24,9 @@ struct axishdl
 	preference control;
 
 	void warp(float v);
-	void set(float v, double real_current_time, double game_current_time);
-	void move(float v, double real_current_time, double game_current_time);
-	void push(float v, double real_current_time, double game_current_time);
+	void set(float v);
+	void move(float v);
+	void push(float v);
 	bool contained();
 
 	void reset();
