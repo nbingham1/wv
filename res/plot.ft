@@ -2,10 +2,9 @@
 
 uniform vec4 color;
 
-in float dist;
 out vec4 frag_color;
 
 void main()
 {
-	frag_color = color*dist*dist;
+	frag_color = color;
 }

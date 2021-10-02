@@ -5,18 +5,14 @@ plothdl::plothdl(palettehdl &palette)
 {
 	type = "plot";
 
-	program = palette.program("res/engine/white.vx", "res/engine/white.ft");
-
-	float width = 1.0;
-	float height = 1.0;
-	float depth = 1.0;
+	program = palette.program("res/plot.vx", "res/plot.ft");
 
 	points.reserve(3);
 	indices.reserve(4);
 
-	points.push_back(vec2f(-1.0, -1.0));
-	points.push_back(vec2f(1.0, -1.0));
-	points.push_back(vec2f(-1.0, 1.0));
+	points.push_back(vec2f(0.0, 0.0));
+	points.push_back(vec2f(1.0, 0.0));
+	points.push_back(vec2f(0.0, 1.0));
 	indices.push_back(0);
 	indices.push_back(1);
 	indices.push_back(0);
