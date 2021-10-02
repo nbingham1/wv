@@ -12,8 +12,7 @@
 #include "graphics/opengl.h"
 #include "graphics/frame.h"
 
-#include "player.h"
-#include "object.h"
+#include "elem.h"
 
 using namespace core;
 
@@ -30,10 +29,7 @@ struct canvashdl
 	vec2i screen;
 
 	map<string, controllerhdl> devices;
-	list<objecthdl*> objects;
-	array<playerhdl> players;
-
-	framehdl frame;
+	elemhdl ui;
 
 	void initialize(int w, int h);
 	void reshape(int w, int h);
@@ -43,8 +39,6 @@ struct canvashdl
 	void render();
 
 	void input();
-
-	playerhdl *add_player();
 };
 
 #endif

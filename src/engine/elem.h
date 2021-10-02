@@ -1,39 +1,42 @@
 /*
- * object.h
+ * elem.h
  *
  *  Created on: Nov 11, 2014
  *      Author: nbingham
  */
 
+#pragma once
+
 #include <math/geometry.h>
 #include <std/string.h>
 #include <math/big.h>
+#include <std/list.h>
 #include "graphics/frame.h"
 
 using namespace core;
 
-#ifndef object_h
-#define object_h
-
 struct canvashdl;
 
-struct objecthdl
+struct elemhdl
 {
-	objecthdl();
-	virtual ~objecthdl();
+	elemhdl();
+	virtual ~elemhdl();
+
+	list<elemhdl*> elems;
 
 	// dynamic type checking
 	string type;
 
-	vec3f position;
+	vec2f position;
+	vec2f scale;
 
 	// user interface
 	bool selected;
 
 	virtual void init(canvashdl &canvas);
 	virtual void prepare(canvashdl &canvas);
-	virtual void render(framehdl &frame);
+	virtual void render(vec2i size);
+
+	void view(vec2i parent_offset, vec2i parent_size);
 };
 
-
-#endif

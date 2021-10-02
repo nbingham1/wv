@@ -39,7 +39,6 @@ bool windowed = true;
 
 GLFWwindow *window = NULL;
 canvashdl canvas;
-int player = 0;
 
 void release(preference *pref, vec3f value)
 {
@@ -54,10 +53,7 @@ void init(int w, int h)
 	canvas.initialize(w, h);
 	canvas.devices.insert("mouse", controllerhdl(2));
 	canvas.devices.insert("keyboard", controllerhdl());
-	for (int i = 0; i < 1; i++) {
-		playerhdl *player = canvas.add_player();
-	}
-
+	
 	canvas.devices["keyboard"].buttons.control.insert(GLFW_KEY_ESCAPE, preference(NULL, release));
 	canvas.devices["mouse"].axes[0].low = 0.25;
 	canvas.devices["mouse"].axes[0].high = 0.75;

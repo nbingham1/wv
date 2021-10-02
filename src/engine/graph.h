@@ -2,7 +2,7 @@
 
 #include <std/list.h>
 #include <math/geometry.h>
-#include "../engine/object.h"
+#include "elem.h"
 #include "../graphics/palette.h"
 
 using namespace core;
@@ -13,7 +13,7 @@ struct signalhdl
 	array<vec2f> data;
 };
 
-struct plothdl : objecthdl
+struct plothdl : elemhdl
 {
 	plothdl(palettehdl &palette);
 	~plothdl();
@@ -25,6 +25,6 @@ struct plothdl : objecthdl
 	array<vec3f> points;
 	array<int> indices;
 
-	void render(framehdl &frame);
+	void render(vec2i size);
 };
 

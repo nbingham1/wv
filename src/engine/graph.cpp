@@ -30,18 +30,14 @@ plothdl::~plothdl()
 {
 }
 
-void plothdl::render(framehdl &frame)
+void plothdl::render(vec2i size)
 {
 	glUseProgram(program);
 
-	mat4f modelview_projection_matrix = frame.projection.value()*frame.modelview.value();
 	glUniform4f(glGetUniformLocation(program, "color"), 1.0, 1.0, 1.0, 1.0);
 
 	// Find the locations of the vertex, normal, and texcoord variables in the shader
 	int vertex_location = glGetAttribLocation(program, "vertex");
-	int mvp_matrix_location = glGetUniformLocation(program, "modelview_projection_matrix");
-
-	//glUniformMatrix4fv(mvp_matrix_location, 1, true, (GLfloat*)&modelview_projection_matrix);
 
 	if (points.size() > 0)
 	{
