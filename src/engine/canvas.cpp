@@ -12,6 +12,8 @@
 #include <sys/time.h>
 #include <math/noise.h>
 #include "plot.h"
+#include "div.h"
+#include "selector.h"
 
 canvashdl::canvashdl()
 {
@@ -31,12 +33,22 @@ void canvashdl::initialize(int w, int h, int dx, int dy)
 	dpi[1] = dy;
 
 	// Initialize some OpenGL Settings
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(0.95, 0.95, 0.95, 0.0);
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	ui.elems.push_back(new plothdl(palette));
+	divhdl *hs = new divhdl(0, array_t<double>(1, 1.5));
+	selectorhdl *s = new selectorhdl(palette);
+	divhdl *vs = new divhdl(1, array<float>());
+	vs->elems.push_back(new plothdl(palette));
+	vs->elems.push_back(new plothdl(palette));
+	vs->elems.push_back(new plothdl(palette));
+
+	hs->elems.push_back(s);
+	hs->elems.push_back(vs);
+
+	ui.elems.push_back(hs);
 	ui.generate(dpi, vec2i(0,0), screen);
 }
 

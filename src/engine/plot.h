@@ -30,8 +30,8 @@ struct signalhdl {
 };
 
 struct gridhdl {
-	geometryhdl axes;
 	geometryhdl grid;
+	geometryhdl axes;
 
 	void prepare(vec2f inches, vec2f offset, vec2f size);
 	void render(int program);
@@ -44,7 +44,6 @@ struct plothdl : elemhdl
 
 	int program;
 
-	gridhdl grid;
 	list<signalhdl> signals;
 
 	vec2f offset;

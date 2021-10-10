@@ -78,20 +78,25 @@ void *preparefunc(void *data)
 
 void *displayfunc(void *data)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	canvas.render();
+	glfwSwapBuffers(window);
+
 	while (!glfwWindowShouldClose(window))
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glfwWaitEvents();
 		canvas.input();
-		canvas.render();
-		glfwSwapBuffers(window);
-		glfwPollEvents();
 	}
 	return NULL;
 }
 
-void reshapefunc(int w, int h)
+void reshapefunc(GLFWwindow* window, int w, int h)
 {
 	canvas.reshape(w, h);
+	canvas.prepare();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	canvas.render();
+	glfwSwapBuffers(window);
 }
 
 void cursorfunc(GLFWwindow* window, double x, double y)
@@ -114,15 +119,17 @@ void cursorfunc(GLFWwindow* window, double x, double y)
 void mousefunc(GLFWwindow* window, int button, int action, int mods)
 {
 	map<string, controllerhdl>::iterator mouse = canvas.devices.find("mouse");
-	if (mouse != canvas.devices.end())
+	if (mouse != canvas.devices.end()) {
 		mouse->value.buttons.set(button, action);
+	}
 }
 
 void keyfunc(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
 	map<string, controllerhdl>::iterator keyboard = canvas.devices.find("keyboard");
-	if (keyboard != canvas.devices.end())
+	if (keyboard != canvas.devices.end()) {
 		keyboard->value.buttons.set(key, action != 0);
+	}
 }
 
 void error_callback(int error, const char* description)
@@ -144,8 +151,11 @@ int main(int argc, char **argv)
 
 	printf("%d %d\n", mode->width, mode->height);
 
+	int width = 1024;
+	int height = 768;
+
 	glfwSetErrorCallback(error_callback);
-	window = glfwCreateWindow(mode->width, mode->height, "BGE", monitor, NULL);
+	window = glfwCreateWindow(width, height, "BGE", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -169,8 +179,9 @@ int main(int argc, char **argv)
 	glfwSetCursorPosCallback(window, cursorfunc);
 	glfwSetMouseButtonCallback(window, mousefunc);
 	glfwSetKeyCallback(window, keyfunc);
+	glfwSetWindowSizeCallback(window, reshapefunc);
 
-	init(mode->width, mode->height);
+	init(width, height);
 
 	displayfunc(NULL);
 
