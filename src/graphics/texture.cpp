@@ -34,9 +34,9 @@ bool texturehdl::load(unsigned int type, const imagehdl &image)
 	else if (image.bpp == 3)
 		format = GL_RGB;
 	else if (image.bpp == 2)
-		format = GL_LUMINANCE_ALPHA;
+		format = GL_RG;
 	else if (image.bpp == 1)
-		format = GL_LUMINANCE;
+		format = GL_RED;
 
 	glGenTextures(1, &identity);
 	glBindTexture(type, identity);

@@ -1,9 +1,13 @@
-varying vec4 color;
-varying vec2 tex_0c;
+#version 140
+
+uniform vec4 color;
 uniform sampler2D tex_0;
+
+in vec2 tex_0c;
+out vec4 frag_color;
 
 void main()
 {
 	vec4 image = texture2D(tex_0, tex_0c);
-	gl_FragColor = vec4(color.rgb, color.a*image.r);
+	frag_color = vec4(image.r, 0.0, 0.0, 1.0);//vec4(1.0, 0.0, 0.0, color.a*image.r);
 }

@@ -5,12 +5,13 @@
  *      Author: nbingham
  */
 
+#pragma once
+
 #include <std/string.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 using namespace core;
-
-#ifndef image_h
-#define image_h
 
 struct imagehdl
 {
@@ -29,5 +30,3 @@ struct imagehdl
 	bool load_tga(string filename);
 };
 
-
-#endif

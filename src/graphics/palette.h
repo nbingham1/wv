@@ -26,6 +26,7 @@ struct palettehdl
 	unsigned int program(string vertex, string fragment);
 	unsigned int program(string vertex, string geometry, string fragment);
 	texturehdl texture(unsigned int type, string filename);
+	texturehdl texture(unsigned int type, string filename, const imagehdl &image);
 };
 
 #endif

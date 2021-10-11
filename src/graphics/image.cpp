@@ -75,6 +75,7 @@ bool imagehdl::load_tga(string filename)
 	}
 
 	int image_size = width * height * bpp;
+	data.reserve(image_size);
 
 	//read the uncompressed image data if type 2
 	if (header[2] == 2)
@@ -86,6 +87,7 @@ bool imagehdl::load_tga(string filename)
 	//read the compressed image data if type 10
 	if (header[2] == 10)
 	{
+		data.count = image_size;
 		// stores the rle header and the temp color data
 		unsigned char rle;
 		unsigned char color[4];
@@ -116,8 +118,7 @@ bool imagehdl::load_tga(string filename)
 					data[ctpixel] = color[0];
 					data[ctpixel+1] = color[1];
 					data[ctpixel+2] = color[2];
-					if (bpp == 4)
-					{
+					if (bpp == 4) {
 						data[ctpixel+3] = color[3];
 					}
 
@@ -145,3 +146,4 @@ bool imagehdl::load_tga(string filename)
 
 	return true;
 }
+

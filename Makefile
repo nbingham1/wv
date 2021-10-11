@@ -3,9 +3,9 @@ CXXFLAGS	= -O2 -g -fmessage-length=0 -std=c++11
 SOURCES	:= $(shell find src -name '*.cpp') $(shell find src -name '*.c')
 OBJECTS	:= $(subst .c,.o,$(subst .cpp,.o,$(subst src/,build/,$(SOURCES))))
 DIRECTORIES := $(sort $(dir $(OBJECTS)))
-INC_PATHS = -Isrc -Istdcore -Imathcore
+INC_PATHS = -Isrc -Istdcore -Imathcore -I/usr/include/freetype2
 LIB_PATHS = -Lstdcore -Lmathcore
-LDFLAGS	= -lglfw -lGL -lGLU -lGLEW -lpthread -lstdcore -lmathcore
+LDFLAGS	= -lglfw -lGL -lGLU -lGLEW -lpthread -lstdcore -lmathcore -lfreetype
 TARGET	= wv
 
 all: build $(TARGET)

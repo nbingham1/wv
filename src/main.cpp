@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 	int height = 768;
 
 	glfwSetErrorCallback(error_callback);
-	window = glfwCreateWindow(width, height, "BGE", NULL, NULL);
+	window = glfwCreateWindow(width, height, "Waveview", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();

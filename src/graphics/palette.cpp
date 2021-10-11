@@ -121,4 +121,19 @@ texturehdl palettehdl::texture(unsigned int type, string filename)
 	return loc->value;
 }
 
+texturehdl palettehdl::texture(unsigned int type, string filename, const imagehdl &image)
+{
+	map<string, texturehdl>::iterator loc = textures.find(filename);
+	if (loc != textures.end())
+		return loc->value;
+	else
+	{
+		texturehdl tex;
+		tex.load(type, image);
+		loc = textures.insert(filename, tex);
+	}
+
+	return loc->value;
+}
+
 

@@ -49,7 +49,7 @@ bool shaderhdl::load(unsigned int type, string filename)
 	glGetShaderInfoLog(identity, 1023, &length, temp);
 	if (length > 0)
 	{
-		cerr << temp;
+		cerr << filename << ": " << temp << endl;
 		return false;
 	}
 
@@ -75,7 +75,7 @@ bool shaderhdl::compile(unsigned int type, string source)
 	glGetShaderInfoLog(identity, 1023, &length, temp);
 	if (length > 0)
 	{
-		cerr << temp;
+		cerr << temp << endl;
 		return false;
 	}
 

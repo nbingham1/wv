@@ -1,9 +1,11 @@
-varying vec4 color;
-varying vec2 tex_0c;
+#version 140
+
+in vec4 vertex;
+
+out vec2 tex_0c;
 
 void main()
 {
-	tex_0c = gl_MultiTexCoord0.st;
-	color = gl_Color;
-	gl_Position = ftransform();
+	gl_Position = vec4(vertex.xy*2 - vec2(1.0, 1.0), 0.0, 1.0);
+	tex_0c = vertex.zw;
 }

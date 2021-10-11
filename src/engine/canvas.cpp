@@ -14,6 +14,7 @@
 #include "plot.h"
 #include "div.h"
 #include "selector.h"
+#include "textbox.h"
 
 canvashdl::canvashdl()
 {
@@ -41,12 +42,14 @@ void canvashdl::initialize(int w, int h, int dx, int dy)
 	divhdl *hs = new divhdl(0, array_t<double>(1, 1.5));
 	selectorhdl *s = new selectorhdl(palette);
 	divhdl *vs = new divhdl(1, array<float>());
+	/*vs->elems.push_back(new plothdl(palette));
 	vs->elems.push_back(new plothdl(palette));
-	vs->elems.push_back(new plothdl(palette));
-	vs->elems.push_back(new plothdl(palette));
+	vs->elems.push_back(new plothdl(palette));*/
 
 	hs->elems.push_back(s);
 	hs->elems.push_back(vs);
+
+	vs->elems.push_back(new textboxhdl(palette));
 
 	ui.elems.push_back(hs);
 	ui.generate(dpi, vec2i(0,0), screen);
