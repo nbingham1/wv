@@ -71,8 +71,8 @@ bool fonthdl::load_ttf(palettehdl &palette, string filename, int char_size)
 	chars.reserve(256);
 	img.data.reserve(img.width*img.height*img.bpp);
 	img.data.count = img.width*img.height*img.bpp;
-	for (int x = 0; x < 16; x++) {
-		for (int y = 0; y < 16; y++) {
+	for (int y = 0; y < 16; y++) {
+		for (int x = 0; x < 16; x++) {
 			if (FT_Load_Char(face, (char)(y*16 + x), FT_LOAD_RENDER))
 			{
 				cout << "ERROR::FREETYTPE: Failed to load Glyph" << endl;  
@@ -83,8 +83,8 @@ bool fonthdl::load_ttf(palettehdl &palette, string filename, int char_size)
 				vec2f(float(x)/16.0, float(y)/16.0), // origin
 				vec2f(float(face->glyph->bitmap.width)/float(img.width), float(face->glyph->bitmap.rows)/float(img.height)), // span
 				vec2f(float(face->glyph->bitmap.width)/float(char_size), float(face->glyph->bitmap.rows)/float(char_size)), // size
-				vec2f(float(face->glyph->bitmap_left)/float(char_size), float(face->glyph->bitmap_top)/float(char_size)), // bearing
-				float(face->glyph->advance.x)/float(char_size)
+				vec2f(float(face->glyph->bitmap_left)/float(char_size), (float(face->glyph->bitmap_top) - float(face->glyph->bitmap.rows))/float(char_size)), // bearing
+				float(face->glyph->advance.x)/float(char_size*64)
 			));
 
 			int s = 0;

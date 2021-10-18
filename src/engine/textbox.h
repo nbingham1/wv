@@ -13,7 +13,14 @@ struct textboxhdl : elemhdl
 	textboxhdl(palettehdl &palette);
 	~textboxhdl();
 
+	string content;
+
+	float size;	
+	vec4f color;
 	fonthdl font;
+
+	array<vec4f> points;
+	array<int> indices;	
 
 	void prepare(vec2f inches);
 	void render();
