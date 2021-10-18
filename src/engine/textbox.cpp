@@ -7,7 +7,7 @@ textboxhdl::textboxhdl(palettehdl &palette)
 
 	size = 12.0;
 	color = vec4f(0.0, 0.0, 0.0, 1.0);
-	content = "Hello, my name is Ned!";
+	content = "Hello, my name is Ned! I'm testing out how to wrap text\nin a textbox.";
 
 	font.load_ttf(palette, "res/FreeSerif.ttf", 48);
 }
@@ -18,6 +18,8 @@ textboxhdl::~textboxhdl()
 
 void textboxhdl::prepare(vec2f inches)
 {
+	vec2f scale = 96.0f*inches;
+
 	points.clear();
 	indices.clear();
 	points.reserve(4*content.size());
@@ -25,33 +27,49 @@ void textboxhdl::prepare(vec2f inches)
 
 	float advance = 0.0;
 	int row = 0;
+	int index = 0;
 	for (int i = 0; i < content.size(); i++) {
-		characterhdl c = font.chars[content[i]];
+		if (advance > 0.0 and (content[i] == '\n' or content[i] == '\r')) {
+			advance = 0.0;
+			row += 1;
+		} else {
+			float test = advance;
+			for (int j = i; advance > 0.0 and j < content.size() and content[j] != ' ' and content[j] != '\t' and content[j] != '\r' and content[j] != '\n'; j++) {
+				test += font.chars[content[j]].advance;
+				if (size*test/scale[0] > 1.0) {
+					advance = 0.0;
+					row += 1;
+				}
+			}
 
-		vec2f scale = 96.0f*inches;
-		float offset = 1.0 - float(row+1)*size/scale[1];
-		float x0 = size*(advance + c.bearing[0])/scale[0];
-		float x1 = size*(advance + c.bearing[0] + c.size[0])/scale[0];
-		float y0 = size*(c.bearing[1])/scale[1] + offset;
-		float y1 = size*(c.bearing[1] + c.size[1])/scale[1] + offset;
+			characterhdl c = font.chars[content[i]];
 
-		float u0 = c.origin[0];
-		float u1 = c.origin[0] + c.span[0];
-		float v0 = c.origin[1];
-		float v1 = c.origin[1] + c.span[1];
+			float offset = 1.0 - float(row+1)*size/scale[1];
+			float x0 = size*(advance + c.bearing[0])/scale[0];
+			float x1 = size*(advance + c.bearing[0] + c.size[0])/scale[0];
+			float y0 = size*(c.bearing[1])/scale[1] + offset;
+			float y1 = size*(c.bearing[1] + c.size[1])/scale[1] + offset;
 
-		points.push_back(vec4f(x0, y0, u0, v0));
-		points.push_back(vec4f(x1, y0, u1, v0));
-		points.push_back(vec4f(x1, y1, u1, v1));
-		points.push_back(vec4f(x0, y1, u0, v1));
-		advance += c.advance;
-		
-		indices.push_back(4*i + 0);
-		indices.push_back(4*i + 1);
-		indices.push_back(4*i + 2);
-		indices.push_back(4*i + 0);
-		indices.push_back(4*i + 2);
-		indices.push_back(4*i + 3);
+			float u0 = c.origin[0];
+			float u1 = c.origin[0] + c.span[0];
+			float v0 = c.origin[1];
+			float v1 = c.origin[1] + c.span[1];
+
+			points.push_back(vec4f(x0, y0, u0, v0));
+			points.push_back(vec4f(x1, y0, u1, v0));
+			points.push_back(vec4f(x1, y1, u1, v1));
+			points.push_back(vec4f(x0, y1, u0, v1));
+			advance += c.advance;	
+			
+
+			indices.push_back(4*index + 0);
+			indices.push_back(4*index + 1);
+			indices.push_back(4*index + 2);
+			indices.push_back(4*index + 0);
+			indices.push_back(4*index + 2);
+			indices.push_back(4*index + 3);
+			index += 1;
+		}
 	}
 }
 
