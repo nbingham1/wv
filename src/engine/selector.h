@@ -14,6 +14,8 @@ struct selectorhdl : elemhdl
 
 	int program;
 
+	float size;
+
 	void prepare(vec2f inches);
 	void render();
 };

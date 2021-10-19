@@ -13,6 +13,8 @@
 #include "graphics/frame.h"
 
 #include "elem.h"
+#include "selector.h"
+#include "div.h"
 
 using namespace core;
 
@@ -32,6 +34,9 @@ struct canvashdl
 	map<string, controllerhdl> devices;
 	elemhdl ui;
 
+	selectorhdl *signalSelector;
+	divhdl *plotArea;
+
 	void initialize(int w, int h, int dx, int dy);
 	void reshape(int w, int h);
 	void release();
@@ -40,6 +45,8 @@ struct canvashdl
 	void render();
 
 	void input();
+
+	void load(string filename);
 };
 
 #endif

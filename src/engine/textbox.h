@@ -10,11 +10,12 @@ using namespace core;
 
 struct textboxhdl : elemhdl
 {
-	textboxhdl(palettehdl &palette);
+	textboxhdl(palettehdl &palette, string content = "");
 	~textboxhdl();
 
 	string content;
-
+	
+	bool wrap;
 	float size;	
 	vec4f color;
 	fonthdl font;

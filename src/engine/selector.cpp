@@ -6,6 +6,7 @@ selectorhdl::selectorhdl(palettehdl &palette)
 	type = "selector";
 
 	program = palette.program("res/plot.vx", "res/plot.ft");
+	size = 12.0;
 }
 
 selectorhdl::~selectorhdl()
@@ -14,6 +15,18 @@ selectorhdl::~selectorhdl()
 
 void selectorhdl::prepare(vec2f inches)
 {
+	float width = size/(96.0*inches[1]);
+
+	int j = 0;
+	float curr = 1.0 - width;
+	for (auto i = elems.begin(); i != elems.end(); i++, j++) {
+		(*i)->position = vec2f(0.05/inches[0], 0.0);
+		(*i)->scale = vec2f(1.0, 1.0);
+
+		(*i)->position[1] = curr - width*0.2;
+		(*i)->scale[1] = width*1.2;
+		curr -= width;
+	}
 }
 
 void selectorhdl::render()

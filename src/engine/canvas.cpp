@@ -18,6 +18,8 @@
 
 canvashdl::canvashdl()
 {
+	signalSelector = nullptr;
+	plotArea = nullptr;
 }
 
 canvashdl::~canvashdl()
@@ -39,19 +41,16 @@ void canvashdl::initialize(int w, int h, int dx, int dy)
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 
-	divhdl *hs = new divhdl(0, array_t<double>(1, 1.5));
-	selectorhdl *s = new selectorhdl(palette);
-	divhdl *vs = new divhdl(1, array<float>());
-	/*vs->elems.push_back(new plothdl(palette));
-	vs->elems.push_back(new plothdl(palette));
-	vs->elems.push_back(new plothdl(palette));*/
+	divhdl *mainElem = new divhdl(0, array_t<double>(1, 1.0));
+	signalSelector = new selectorhdl(palette);
 
-	hs->elems.push_back(s);
-	hs->elems.push_back(vs);
+	divhdl *plotArea = new divhdl(1, array<float>());
+	plotArea->elems.push_back(new plothdl(palette));
 
-	vs->elems.push_back(new textboxhdl(palette));
+	mainElem->elems.push_back(signalSelector);
+	mainElem->elems.push_back(plotArea);
 
-	ui.elems.push_back(hs);
+	ui.elems.push_back(mainElem);
 	ui.generate(dpi, vec2i(0,0), screen);
 }
 
@@ -81,4 +80,34 @@ void canvashdl::input()
 {
 	for (map<string, controllerhdl>::iterator i = devices.begin(); i != devices.end(); i++)
 		i->value.update();
+}
+
+void canvashdl::load(string filename)
+{
+	file f(filename, file::r);
+
+	int row = 0;
+	array<string> cols;
+	string col = " ";
+	while (col.size() > 0) {
+		cols.clear();
+		col = " ";
+		while (col.size() > 0 and col.back() != '\n' and col.back() != '\0' and col.back() != '\r') {
+			col.clear();
+			f.read_to(" \t\n\r\0", col);
+			if (col.size() > 1) {
+				cols.push_back(col.sub(0, -1));
+			}
+		}
+
+		if (row == 0) {
+			for (int i = 2; i < cols.size(); i++) {
+				signalSelector->elems.push_back(new textboxhdl(palette, cols[i]));
+			}
+		}
+
+		row++;
+	}
+
+	f.close();	
 }

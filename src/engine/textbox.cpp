@@ -1,13 +1,14 @@
 #include "textbox.h"
 #include "../graphics/opengl.h"
 
-textboxhdl::textboxhdl(palettehdl &palette)
+textboxhdl::textboxhdl(palettehdl &palette, string content)
 {
 	type = "textbox";
 
+	wrap = false;
 	size = 12.0;
 	color = vec4f(0.0, 0.0, 0.0, 1.0);
-	content = "Hello, my name is Ned! I'm testing out how to wrap text\nin a textbox.";
+	this->content = content;
 
 	font.load_ttf(palette, "res/FreeSerif.ttf", 48);
 }
@@ -33,12 +34,14 @@ void textboxhdl::prepare(vec2f inches)
 			advance = 0.0;
 			row += 1;
 		} else {
-			float test = advance;
-			for (int j = i; advance > 0.0 and j < content.size() and content[j] != ' ' and content[j] != '\t' and content[j] != '\r' and content[j] != '\n'; j++) {
-				test += font.chars[content[j]].advance;
-				if (size*test/scale[0] > 1.0) {
-					advance = 0.0;
-					row += 1;
+			if (wrap) {
+				float test = advance;
+				for (int j = i; advance > 0.0 and j < content.size() and content[j] != ' ' and content[j] != '\t' and content[j] != '\r' and content[j] != '\n'; j++) {
+					test += font.chars[content[j]].advance;
+					if (size*test/scale[0] > 1.0) {
+						advance = 0.0;
+						row += 1;
+					}
 				}
 			}
 

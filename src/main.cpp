@@ -45,7 +45,7 @@ void release(preference *pref, vec3f value)
 	glfwSetWindowShouldClose(window, true);
 }
 
-void init(int w, int h)
+void init(int w, int h, const char *filename)
 {
 	srand(time(0));
 
@@ -65,6 +65,10 @@ void init(int w, int h)
 	canvas.devices["mouse"].axes[0].high = 0.75;
 	canvas.devices["mouse"].axes[1].low = 0.25;
 	canvas.devices["mouse"].axes[1].high = 0.75;
+
+	canvas.load(filename);
+
+	canvas.prepare();
 }
 
 void *preparefunc(void *data)
@@ -137,8 +141,12 @@ void error_callback(int error, const char* description)
     fputs(description, stderr);
 }
 
-int main(int argc, char **argv)
+int main(int argc, const char **argv)
 {
+	if (argc <= 1) {
+		return 1;
+	}
+
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
 
@@ -181,7 +189,7 @@ int main(int argc, char **argv)
 	glfwSetKeyCallback(window, keyfunc);
 	glfwSetWindowSizeCallback(window, reshapefunc);
 
-	init(width, height);
+	init(width, height, argv[1]);
 
 	displayfunc(NULL);
 
