@@ -45,6 +45,27 @@ void release(preference *pref, vec3f value)
 	glfwSetWindowShouldClose(window, true);
 }
 
+void horizontal(preference *pref, vec3f value)
+{
+	canvas.mouse[0] = value[0];
+}
+
+void vertical(preference *pref, vec3f value)
+{
+	canvas.mouse[1] = value[0];
+}
+
+void leftclick(preference *pref, vec3f value)
+{
+	cout << "left " << canvas.mouse << endl;
+}
+
+void rightclick(preference *pref, vec3f value)
+{
+	cout << "right " << canvas.mouse << endl;
+}
+
+
 void init(int w, int h, const char *filename)
 {
 	srand(time(0));
@@ -65,6 +86,10 @@ void init(int w, int h, const char *filename)
 	canvas.devices["mouse"].axes[0].high = 0.75;
 	canvas.devices["mouse"].axes[1].low = 0.25;
 	canvas.devices["mouse"].axes[1].high = 0.75;
+	canvas.devices["mouse"].buttons.control.insert(GLFW_MOUSE_BUTTON_LEFT, preference(NULL, leftclick));
+	canvas.devices["mouse"].buttons.control.insert(GLFW_MOUSE_BUTTON_RIGHT, preference(NULL, rightclick));
+	canvas.devices["mouse"].axes[0].control = preference(nullptr, horizontal);
+	canvas.devices["mouse"].axes[1].control = preference(nullptr, vertical);
 
 	canvas.load(filename);
 

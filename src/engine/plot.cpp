@@ -68,11 +68,51 @@ void geometryhdl::render(int program)
 	}
 }
 
-void signalhdl::prepare(vec2f offset, vec2f size) {
+signalhdl::signalhdl() {
+	data = nullptr;
+	color = vec4f(1.0, 1.0, 1.0, 1.0);
 }
 
-void signalhdl::render(int program) {
-	curve.render(program);
+signalhdl::signalhdl(datahdl *data) {
+	this->data = data;
+	color = vec4f(1.0, 1.0, 1.0, 1.0);
+}
+
+signalhdl::~signalhdl() {
+}
+
+void signalhdl::render(int program, vec2f offset, vec2f size) {
+	glUseProgram(program);
+	glUniform4f(glGetUniformLocation(program, "color"), color[0], color[1], color[2], color[3]);
+	glUniform2f(glGetUniformLocation(program, "offset"), offset[0], offset[1]);
+	glUniform2f(glGetUniformLocation(program, "scale"), size[0], size[1]);
+
+	// Find the locations of the vertex, normal, and texcoord variables in the shader
+	int vertex_location = glGetAttribLocation(program, "vertex");
+
+	if (data != nullptr and data->points.size() > 0 and data->indices.size() > 0)
+	{
+		GLuint vao;
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+		GLuint vbo;
+		glGenBuffers(1, &vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vec2f)*data->points.size(), (GLfloat*)data->points.data, GL_STATIC_DRAW);
+		GLuint ibo;
+		glGenBuffers(1, &ibo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*data->indices.size(), (GLuint*)data->indices.data, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(vertex_location);
+		glVertexAttribPointer(vertex_location, 2, GL_FLOAT, false, 0, 0);
+		glDrawElements(GL_LINE_STRIP, data->indices.size(), GL_UNSIGNED_INT, 0);
+		glDisableVertexAttribArray(vertex_location);
+
+		glDeleteBuffers(1, &ibo);
+		glDeleteBuffers(1, &vbo);
+		glDeleteVertexArrays(1, &vao);
+	}
 }
 
 void gridhdl::prepare(vec2f inches, vec2f offset, vec2f size) {
@@ -131,9 +171,10 @@ plothdl::plothdl(palettehdl &palette)
 {
 	type = "plot";
 
-	program = palette.program("res/plot.vx", "res/plot.ft");
-	offset = vec2f(0.0, 0.0);
-	size = vec2f(10.0, 1.0);
+	program = palette.program("res/ui.vx", "res/ui.ft");
+	plot_program = palette.program("res/plot.vx", "res/plot.ft");
+	offset = vec2f(0.0, 0.1);
+	size = vec2f(1e7, 0.5);
 }
 
 plothdl::~plothdl()
@@ -142,9 +183,9 @@ plothdl::~plothdl()
 
 void plothdl::prepare(vec2f inches)
 {
-	for (auto i = signals.begin(); i != signals.end(); i++) {
+	/*for (auto i = signals.begin(); i != signals.end(); i++) {
 		i->prepare(offset, size);
-	}
+	}*/
 }
 
 void plothdl::render()
@@ -191,6 +232,6 @@ void plothdl::render()
 	glDeleteVertexArrays(1, &vao);
 
 	for (auto i = signals.begin(); i != signals.end(); i++) {
-		i->render(program);
+		i->render(plot_program, offset, size);
 	}
 }

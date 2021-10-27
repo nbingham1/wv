@@ -5,7 +5,7 @@ selectorhdl::selectorhdl(palettehdl &palette)
 {
 	type = "selector";
 
-	program = palette.program("res/plot.vx", "res/plot.ft");
+	program = palette.program("res/ui.vx", "res/ui.ft");
 	size = 12.0;
 }
 

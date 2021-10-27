@@ -3,15 +3,10 @@
 #include <std/list.h>
 #include <math/geometry.h>
 #include "elem.h"
+#include "data.h"
 #include "../graphics/palette.h"
 
 using namespace core;
-
-struct datahdl
-{
-	string name;
-	array<vec2f> values;
-};
 
 struct geometryhdl {
 	array<vec2f> points;
@@ -22,11 +17,14 @@ struct geometryhdl {
 };
 
 struct signalhdl {
-	datahdl *data;
-	geometryhdl curve;
+	signalhdl();
+	signalhdl(datahdl *data);
+	~signalhdl();
 
-	void prepare(vec2f offset, vec2f size);
-	void render(int program);
+	datahdl *data;
+	vec4f color;
+	
+	void render(int program, vec2f offset, vec2f size);
 };
 
 struct gridhdl {
@@ -43,6 +41,7 @@ struct plothdl : elemhdl
 	~plothdl();
 
 	int program;
+	int plot_program;
 
 	list<signalhdl> signals;
 

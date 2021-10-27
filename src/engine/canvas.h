@@ -11,6 +11,7 @@
 #include "graphics/palette.h"
 #include "graphics/opengl.h"
 #include "graphics/frame.h"
+#include "data.h"
 
 #include "elem.h"
 #include "selector.h"
@@ -36,6 +37,11 @@ struct canvashdl
 
 	selectorhdl *signalSelector;
 	divhdl *plotArea;
+	vec2f min, max;
+
+	vec2f mouse;
+
+	list<datahdl> data;
 
 	void initialize(int w, int h, int dx, int dy);
 	void reshape(int w, int h);

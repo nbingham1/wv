@@ -15,6 +15,7 @@
 #include "div.h"
 #include "selector.h"
 #include "textbox.h"
+#include "data.h"
 
 canvashdl::canvashdl()
 {
@@ -44,8 +45,7 @@ void canvashdl::initialize(int w, int h, int dx, int dy)
 	divhdl *mainElem = new divhdl(0, array_t<double>(1, 1.0));
 	signalSelector = new selectorhdl(palette);
 
-	divhdl *plotArea = new divhdl(1, array<float>());
-	plotArea->elems.push_back(new plothdl(palette));
+	plotArea = new divhdl(1, array<float>());
 
 	mainElem->elems.push_back(signalSelector);
 	mainElem->elems.push_back(plotArea);
@@ -86,6 +86,8 @@ void canvashdl::load(string filename)
 {
 	file f(filename, file::r);
 
+	array<datahdl*> data;
+
 	int row = 0;
 	array<string> cols;
 	string col = " ";
@@ -101,8 +103,33 @@ void canvashdl::load(string filename)
 		}
 
 		if (row == 0) {
+			data.reserve(cols.size()-2);
 			for (int i = 2; i < cols.size(); i++) {
-				signalSelector->elems.push_back(new textboxhdl(palette, cols[i]));
+				data.push_back(new datahdl(palette, cols[i]));
+				signalSelector->elems.push_back(data.back());
+				plotArea->elems.push_back(new plothdl(palette));
+				((plothdl*)plotArea->elems.back())->signals.push_back(signalhdl(data.back()));
+			}
+		} else if (cols.size() > 1) {
+			float t = atof(cols[1].c_str());
+			if (t < min[0]) {
+				min[0] = t;
+			}
+			if (t > max[0]) {
+				max[0] = t;
+			}
+			for (int i = 2; i < cols.size(); i++) {
+				float v = atof(cols[i].c_str());
+				if (v < min[1]) {
+					min[1] = v;
+				}
+				if (v > max[1]) {
+					max[1] = v;
+				}
+				if (data[i-2] != nullptr) {
+					data[i-2]->indices.push_back(data[i-2]->points.size());
+					data[i-2]->points.push_back(vec2f(t, v));
+				}
 			}
 		}
 

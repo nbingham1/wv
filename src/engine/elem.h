@@ -39,5 +39,7 @@ struct elemhdl
 
 	void generate(vec2i dpi, vec2i parent_offset, vec2i parent_size);
 	void view(vec2i parent_offset, vec2i parent_size);
+
+	elemhdl* find(vec2i parent_offset, vec2i parent_size, vec2i point);
 };
 
